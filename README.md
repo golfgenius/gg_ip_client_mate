@@ -31,3 +31,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## Code of Conduct
 
 Everyone interacting in the GgIpClientMate project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/gg_ip_client_mate/blob/main/CODE_OF_CONDUCT.md).
+
+
+## Configure variables needed for this gem
+To configure GgIpClientMate, use the GgIpClientMate::Config.#{variable}= method to set the client_identifier, client_secret, redirect_uri, or oauth_provider_uri variables. Simply replace #{variable} with the name of the variable you wish to set.
