@@ -18,22 +18,14 @@ module Oauth
     # The initialize method creates a new instance of the class and initializes
     # it with the provided client identifier, client secret, and redirect URI.
     #
-    # @param [String] client_identifier - The client identifier for the
-    #                                     OpenID Connect client.
-    # @param [String] client_secret - The client secret for the OpenID Connect
-    #                                 client.
-    # @param [String] redirect_uri - The URI where the user should be redirected
-    #                                after completing the authentication flow.
-    #
     # The initialize method returns a new instance of the OpenIdConnectClient class
     # with the OpenID Connect client initialized with the provided parameters.
     #
-    def initialize(client_identifier, client_secret, redirect_uri, oauth_provider_uri)
-      @oauth_provider_uri = oauth_provider_uri
+    def initialize
       @client = OpenIDConnect::Client.new(
-        identifier: client_identifier,
-        secret: client_secret,
-        redirect_uri: redirect_uri,
+        identifier: GgIpClientMate::Config.client_identifier,
+        secret: GgIpClientMate::Config.client_secret,
+        redirect_uri: GgIpClientMate::Config.redirect_uri,
         authorization_endpoint: discover&.authorization_endpoint,
         token_endpoint: discover&.token_endpoint,
         userinfo_endpoint: discover&.userinfo_endpoint
@@ -74,7 +66,7 @@ module Oauth
     # The discover method returns an instance of OpenIDConnect::Discovery::Provider::Config
     # that contains the discovered OpenID Connect provider configuration.
     def discover
-      @discover ||= self.class.discover(@oauth_provider_uri)
+      @discover ||= self.class.discover(GgIpClientMate::Config.oauth_provider_uri)
     end
   end
 end
