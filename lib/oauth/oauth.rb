@@ -8,3 +8,4 @@
 module Oauth; end
 
 require_relative 'open_id_connect_client'
+require_relative 'user_info'

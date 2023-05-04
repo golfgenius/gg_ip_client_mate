@@ -27,7 +27,7 @@ module Oauth
     #
     def self.info(token)
       response = HTTParty.get(
-        ::OpenIdConnectClient.discover.userinfo_endpoint,
+        OpenIdConnectClient.discover.userinfo_endpoint,
         headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}" }
       )
 
@@ -95,72 +95,102 @@ module Oauth
 
       user_create_or_update_with_associations(user, token_and_refresh, user_info) unless user.blank? && user_info.blank?
     end
-  end
 
-  #
-  # The update_existing_user method updates an existing user record in the local application
-  # database with the latest token and refresh token information obtained from an IP and
-  # user information associated with the user's IP account, keeping the local application's
-  # user records up-to-date with the latest information from an IP.
-  #
-  # @param [Object] user - object representing the user
-  # @param [Hash] token_and_refresh - hash thant contains token and refresh token
-  # @param [Hash] user_info - hash thant contains all user information from IP
-  #
-  # This method returns updated user record
-  #
-  def self.update_existing_user(user, token_and_refresh, user_info)
-    user.assign_attributes(user_attributes(user_info, token_and_refresh))
-    user.save!
+    #
+    # The update_existing_user method updates an existing user record in the local application
+    # database with the latest token and refresh token information obtained from an IP and
+    # user information associated with the user's IP account, keeping the local application's
+    # user records up-to-date with the latest information from an IP.
+    #
+    # @param [Object] user - object representing the user
+    # @param [Hash] token_and_refresh - hash thant contains token and refresh token
+    # @param [Hash] user_info - hash thant contains all user information from IP
+    #
+    # This method returns updated user record
+    #
+    def self.update_existing_user(user, token_and_refresh, user_info)
+      user.assign_attributes(user_attributes(user_info, token_and_refresh))
+      user.save!
 
-    user
-  end
-
-  #
-  # The user_create_or_update_with_associations method creates or updates a user record in the 
-  # local application database with the latest token and refresh token information obtained
-  # from an IP and user information associated with the user's IP account.
-  #
-  # @param [Object] user - object representing the user
-  # @param [Hash] token_and_refresh - hash thant contains token and refresh token
-  # @param [Hash] user_info - hash thant contains all user information from IP
-  #
-  # This method returns updated user record
-  #
-  def self.user_create_or_update_with_associations(user, token_and_refresh, user_info)
-    return if user_info.blank?
-
-    user = if user.present?
-             update_existing_user(user, token_and_refresh, user_info)
-           else
-             User.create(user_attributes(user_info, token_and_refresh))
-           end
-
-    user&.reload
-  end
-
-  #
-  # The user_attributes method constructs a hash of attributes that can be used to
-  # create or update a user record in the local application database based on the
-  # user information and token and refresh token information obtained from IP.
-  #
-  # @param [Hash] user_info - hash thant contains all user information from IP
-  # @param [Hash] token_and_refresh - hash thant contains token and refresh token
-  #
-  # This method returns a hash, which contains the values of all the attributes
-  # needed to create or update a user record in the local application database
-  # based on the latest information obtained from the IP.
-  #
-  def self.user_attributes(user_info, token_and_refresh)
-    attrs = {
-      user.send(GgIpClientMate::Config.oauth_token_attribute_name) => token_and_refresh[:user_token],
-      user.send(GgIpClientMate::Config.oauth_refresh_token_attribute_name) => token_and_refresh[:user_refresh_token],
-    }
-
-    GgIpClientMate::Config.each do |key, doorkeeper_key|
-      attrs[key] = user_info[doorkeeper_key]
+      user
     end
 
-    attrs
+    #
+    # The user_create_or_update_with_associations method creates or updates a user record in the 
+    # local application database with the latest token and refresh token information obtained
+    # from an IP and user information associated with the user's IP account.
+    #
+    # @param [Object] user - object representing the user
+    # @param [Hash] token_and_refresh - hash thant contains token and refresh token
+    # @param [Hash] user_info - hash thant contains all user information from IP
+    #
+    # This method returns updated user record
+    #
+    def self.user_create_or_update_with_associations(user, token_and_refresh, user_info)
+      return if user_info.blank?
+
+      user = if user.present?
+              update_existing_user(user, token_and_refresh, user_info)
+            else
+              User.create(user_attributes(user_info, token_and_refresh))
+            end
+
+      user&.reload
+    end
+
+    #
+    # The user_attributes method constructs a hash of attributes that can be used to
+    # create or update a user record in the local application database based on the
+    # user information and token and refresh token information obtained from IP.
+    #
+    # @param [Hash] user_info - hash thant contains all user information from IP
+    # @param [Hash] token_and_refresh - hash thant contains token and refresh token
+    #
+    # This method returns a hash, which contains the values of all the attributes
+    # needed to create or update a user record in the local application database
+    # based on the latest information obtained from the IP.
+    #
+    def self.user_attributes(user_info, token_and_refresh)
+      attrs = {
+        GgIpClientMate::Config.oauth_token_attribute_name => token_and_refresh[:user_token],
+        GgIpClientMate::Config.oauth_refresh_token_attribute_name => token_and_refresh[:user_refresh_token],
+      }
+
+      GgIpClientMate::Config.user_info_attribute_mapping.each do |key, doorkeeper_key|
+        attrs[key] = user_info[doorkeeper_key]
+      end
+
+      attrs
+    end
+
+    #
+    #
+    #
+    # def self.update_source(user, async: false)
+    #   payload = {
+    #     first_name: user.first_name,
+    #     last_name: user.last_name,
+    #     gender: user.gender,
+    #     phone: user.phone,
+    #     phone_prefix: user.phone_prefix,
+    #     phone_prefix_country: user.phone_prefix_country,
+    #     ghin_number: user.ghin_number
+    #   }
+
+    #   # if async
+    #   #   PerformHttpRequest.perform_async(action: :patch, url: , body: payload.to_json, headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" })
+    #   #   HTTParty.patch(
+    #   #     "#{Rails.application.secrets["ip_root_url"]}/api/update_account_settings",
+    #   #     body: payload.to_json,
+    #   #     headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
+    #   #   )
+    #   # else
+    #     @response = HTTParty.patch(
+    #       "#{Rails.application.secrets["ip_root_url"]}/api/update_account_settings",
+    #       body: payload.to_json,
+    #       headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
+    #     )
+    #   # end
+    # end
   end
 end
