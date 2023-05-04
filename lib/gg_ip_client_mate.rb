@@ -18,6 +18,14 @@ module GgIpClientMate
   def self.find_and_update_or_create_user(token_and_refresh: {}, user: nil)
     Oauth::UserInfo.find_and_update_or_create_user(token_and_refresh: token_and_refresh, user: user)
   end
+
+  def self.revoke(user)
+    Oauth::OpenIdConnectClient.new.revoke(user)
+  end
+
+  def self.logout_url
+    Oauth::OpenIdConnectClient.new.logout_url
+  end
 end
 
 require 'gg_ip_client_mate/config'

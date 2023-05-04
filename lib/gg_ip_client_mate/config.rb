@@ -10,11 +10,12 @@ module GgIpClientMate
   # GgIpClientMate::Config.client_identifier = 'your-client-id'
   #
   class Config
-    @client_identifier, @client_secret, @redirect_uri, @oauth_provider_uri = nil
+    @client_identifier, @client_secret, @redirect_uri, @oauth_provider_uri, @root_uri = nil
 
     class << self
       ### IP config attributes
-      attr_accessor :client_identifier, :client_secret, :redirect_uri, :oauth_provider_uri
+      attr_accessor :client_identifier, :client_secret, :oauth_provider_uri
+      attr_accessor :redirect_uri, :root_uri
       ########################
 
       ### User attributes

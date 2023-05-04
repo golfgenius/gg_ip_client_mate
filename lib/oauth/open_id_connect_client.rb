@@ -14,6 +14,8 @@ module Oauth
   # using their existing credentials.
   #
   class OpenIdConnectClient
+    attr_reader :logout_url
+
     #
     # The initialize method creates a new instance of the class and initializes
     # it with the provided client identifier, client secret, and redirect URI.
@@ -30,6 +32,8 @@ module Oauth
         token_endpoint: discover&.token_endpoint,
         userinfo_endpoint: discover&.userinfo_endpoint
       )
+
+      @logout_url = "#{discover.end_session_endpoint}?post_sign_out_redirect_url=#{GgIpClientMate::Config.root_uri}"
     end
 
     #
@@ -86,6 +90,21 @@ module Oauth
       rescue Rack::OAuth2::Client::Error
         nil
       end
+    end
+
+    def revoke(user)
+      revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
+
+      HTTParty.send(:post, revocation_endpoint, 
+        body: {
+          token: user.oauth_token,
+          client_id: GgIpClientMate::Config.client_identifier,
+          client_secret: GgIpClientMate::Config.client_secret
+        }.to_json,
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{user.oauth_token}"
+        })
     end
 
     private
