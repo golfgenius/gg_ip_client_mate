@@ -10,10 +10,32 @@ module GgIpClientMate
   # GgIpClientMate::Config.client_identifier = 'your-client-id'
   #
   class Config
-    @client_identifier, @client_secret, @redirect_uri, @oauth_provider_uri = nil
+    @client_identifier, @client_secret, @redirect_uri, @oauth_provider_uri, @root_uri = nil
 
     class << self
-      attr_accessor :client_identifier, :client_secret, :redirect_uri, :oauth_provider_uri
+      ### IP config attributes
+      attr_accessor :client_identifier, :client_secret, :oauth_provider_uri
+      attr_accessor :redirect_uri, :root_uri
+      ########################
+
+      ### User attributes
+      # the attribute name on User model that is used to store an access token
+      # that is issued by an OAuth provider to authorize third-party applications
+      # to access a user's protected resources.
+      attr_accessor :oauth_token_attribute_name
+
+      # the attribute name that is used to store the refresh_token that needed to
+      # obtain a new access token when the current access token expires in
+      # OAuth authentication.
+      attr_accessor :oauth_refresh_token_attribute_name
+
+      # attribute name used to link a user on the client application with the
+      # corresponding user on the identity provider application by providing
+      # a unique identifier that can be used to retrieve and match user records.
+      attr_accessor :external_id_attribute_name
+
+      # attribute maps all the user attributes with the doorkeeper attributes
+      attr_accessor :user_info_attribute_mapping
     end
   end
 end

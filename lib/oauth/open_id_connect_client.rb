@@ -14,30 +14,26 @@ module Oauth
   # using their existing credentials.
   #
   class OpenIdConnectClient
+    attr_reader :logout_url
+
     #
     # The initialize method creates a new instance of the class and initializes
     # it with the provided client identifier, client secret, and redirect URI.
     #
-    # @param [String] client_identifier - The client identifier for the
-    #                                     OpenID Connect client.
-    # @param [String] client_secret - The client secret for the OpenID Connect
-    #                                 client.
-    # @param [String] redirect_uri - The URI where the user should be redirected
-    #                                after completing the authentication flow.
-    #
     # The initialize method returns a new instance of the OpenIdConnectClient class
     # with the OpenID Connect client initialized with the provided parameters.
     #
-    def initialize(client_identifier, client_secret, redirect_uri, oauth_provider_uri)
-      @oauth_provider_uri = oauth_provider_uri
+    def initialize
       @client = OpenIDConnect::Client.new(
-        identifier: client_identifier,
-        secret: client_secret,
-        redirect_uri: redirect_uri,
+        identifier: GgIpClientMate::Config.client_identifier,
+        secret: GgIpClientMate::Config.client_secret,
+        redirect_uri: GgIpClientMate::Config.redirect_uri,
         authorization_endpoint: discover&.authorization_endpoint,
         token_endpoint: discover&.token_endpoint,
         userinfo_endpoint: discover&.userinfo_endpoint
       )
+
+      @logout_url = "#{discover.end_session_endpoint}?post_sign_out_redirect_url=#{GgIpClientMate::Config.root_uri}"
     end
 
     #
@@ -56,13 +52,59 @@ module Oauth
     # provider configuration from the provided OAuth provider URI.
     #
     # @param [String] oauth_provider_uri - The URI of the OAuth provider that
-    # supports the OpenID Connect protocol.
+    #                                      supports the OpenID Connect protocol.
     #
     # The discover method returns an instance of OpenIDConnect::Discovery::Provider::Config
     # that contains the discovered OpenID Connect provider configuration.
     #
-    def self.discover(oauth_provider_uri)
-      OpenIDConnect::Discovery::Provider::Config.discover! oauth_provider_uri
+    def self.discover
+      OpenIDConnect::Discovery::Provider::Config.discover! GgIpClientMate::Config.oauth_provider_uri
+    end
+
+    #
+    # This get_token_from_code retrieves the user token and refresh token
+    # from an authorization code received from an OAuth2 authentication flow.
+    # The method uses the Rack::OAuth2 client library to exchange the
+    # authorization code for an access token and refresh token.
+    #
+    # @param [String] code - representing the authorization code received
+    #                        from the authorization server.
+    #
+    # This method returns:
+    #     - If the exchange is successful, the method returns a hash containing the user token and refresh token:
+    #         * user_token: A string representing the user token.
+    #         * user_refresh_token: A string representing the user refresh token.
+    #
+    #     - If the exchange is unsuccessful, the method returns nil.
+    #
+    def get_token_from_code(code)
+      @client.authorization_code = code
+
+      begin
+        access_token = @client.access_token!
+
+        {
+          user_token: access_token.access_token,
+          user_refresh_token: access_token.refresh_token
+        }
+      rescue Rack::OAuth2::Client::Error
+        nil
+      end
+    end
+
+    def revoke(user)
+      revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
+
+      HTTParty.send(:post, revocation_endpoint, 
+        body: {
+          token: user.oauth_token,
+          client_id: GgIpClientMate::Config.client_identifier,
+          client_secret: GgIpClientMate::Config.client_secret
+        }.to_json,
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{user.oauth_token}"
+        })
     end
 
     private
@@ -74,7 +116,7 @@ module Oauth
     # The discover method returns an instance of OpenIDConnect::Discovery::Provider::Config
     # that contains the discovered OpenID Connect provider configuration.
     def discover
-      @discover ||= self.class.discover(@oauth_provider_uri)
+      @discover ||= self.class.discover
     end
   end
 end
