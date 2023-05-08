@@ -1,37 +1,59 @@
 # GgIpClientMate
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/gg_ip_client_mate`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The purpose of this gem is to simplify integration with Golf Genius Identity Provider setup by acting as a wrapper.
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Install the gem and add to the application's Gemfile:
+```
+  gem 'gg_ip_client_mate', git: 'https://github.com/golfgenius/gg_ip_client_mate', branch: 'master'
+```
+Generate a github token from https://github.com/settings/tokens with `repo` scope, copy the code and add it to the bundle config `bundle config GITHUB__COM my-token:x-oauth-basic` where `my-token` is the new token generated from Git
 
-    $ bundle add gg_ip_client_mate
+Then run `bundle install`
 
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install gg_ip_client_mate
+Initialize GgIpClientMate config variables:
+```
+  GgIpClientMate::Config.client_identifier = Rails.application.secrets["oauth_client_id"] # This variable is used to set the OAuth client ID provided by the IP application. It is typically used to authenticate the client application with the IP.
+  GgIpClientMate::Config.client_secret = Rails.application.secrets["oauth_client_secret"] # This variable is used to set the OAuth client secret provided by the IP application. It is typically used in conjunction with the client ID to authenticate the client application with the IP.
+  GgIpClientMate::Config.oauth_provider_uri = Rails.application.secrets["oauth_provider_uri"] # This variable is used to set the URI for the IP application, which is used to initiate the OAuth authentication flow. This URI should have an HTTPS prefix for security reason
+  GgIpClientMate::Config.redirect_uri ||= '...' # This variable is used to set the URI where the IP application will redirect the user after they have authenticated and granted access to their information. This URI should be responsible for exchanging the IP code for a user token and refresh token.
+  GgIpClientMate::Config.root_uri ||= '...' #  This variable is used to set the root URI for the client application, which is where the user will be redirected after logging out of the IP application.
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+#### Authorization uri
+Get the IP authorization URI for the Client with the given scope using:
+```
+  GgIpClientMate.authorization_uri
+```
+Then redirect the flow to the result url provided by `GgIpClientMate.authorization_uri`
 
-## Development
+#### Get Token from Code
+Retrieve the user token and refresh token from an authorization code received from an OAuth2 authentication flow.
+In the controller method that is responsible for IP login add this in order to exchange the authorization code for an access token and refresh token.
+```
+  GgIpClientMate.get_token_from_code(params[:code])
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+#### Get IP user details and update the database record
+Find and update or create a user record in the local application database based on information obtained from the IP. This method is used to get latest data about the User from IP ( the single source of truth )
+```
+  GgIpClientMate.find_and_update_or_create_user(token_and_refresh: token_and_refresh)
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+#### Update Source
+When updating User details from the client app, the client need to send the latest changes to the IP. Add this to the user update controller action
+```
+  GgIpClientMate.update_source(user)
+```
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/gg_ip_client_mate. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/gg_ip_client_mate/blob/main/CODE_OF_CONDUCT.md).
-
-## Code of Conduct
-
-Everyone interacting in the GgIpClientMate project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/gg_ip_client_mate/blob/main/CODE_OF_CONDUCT.md).
-
-
-## Configure variables needed for this gem
-To configure GgIpClientMate, use the GgIpClientMate::Config.#{variable}= method to set the client_identifier, client_secret, redirect_uri, or oauth_provider_uri variables. Simply replace #{variable} with the name of the variable you wish to set.
+#### Revoke existing session and logout user from client app and from IP
+When a user wants to log out of the client application, before clearing the cookie, the token and refresh token needs to be revoked and the IP session needs to be destroyed
+Add this to the session destrio controler action
+```
+GgIpClientMate.revoke(current_user) # to revoke token and refresh token
+redirect_to GgIpClientMate.logout_url # to redirect to the IP logout URL
+```
+After user gets logged out of the IP, he will get redirected back to client app route path.
