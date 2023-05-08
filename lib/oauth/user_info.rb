@@ -97,7 +97,7 @@ module Oauth
     end
 
     #
-    # The update_existing_user method updates an existing user record in the local application
+    # The assign_user_attributes_and_save method updates an existing user record in the local application
     # database with the latest token and refresh token information obtained from an IP and
     # user information associated with the user's IP account, keeping the local application's
     # user records up-to-date with the latest information from an IP.
@@ -108,8 +108,8 @@ module Oauth
     #
     # This method returns updated user record
     #
-    def self.update_existing_user(user, token_and_refresh, user_info)
-      user.assign_attributes(user_attributes(user_info, token_and_refresh))
+    def self.assign_user_attributes_and_save(user, token_and_refresh, user_info)
+      user.assign_attributes_and_association_attributes(user_attributes(user_info, token_and_refresh))
       user.save!
 
       user
@@ -130,9 +130,9 @@ module Oauth
       return if user_info.blank?
 
       user = if user.present?
-              update_existing_user(user, token_and_refresh, user_info)
+              assign_user_attributes_and_save(user, token_and_refresh, user_info)
             else
-              User.create(user_attributes(user_info, token_and_refresh))
+              assign_user_attributes_and_save(User.new, token_and_refresh, user_info)
             end
 
       user&.reload
@@ -164,33 +164,21 @@ module Oauth
     end
 
     #
+    # The update_source method updates the user account settings in the IP by sending a
+    # PATCH request to the /api/update_account_settings endpoint with the updated payload
     #
+    # @param [Object] user - object representing the user
     #
-    # def self.update_source(user, async: false)
-    #   payload = {
-    #     first_name: user.first_name,
-    #     last_name: user.last_name,
-    #     gender: user.gender,
-    #     phone: user.phone,
-    #     phone_prefix: user.phone_prefix,
-    #     phone_prefix_country: user.phone_prefix_country,
-    #     ghin_number: user.ghin_number
-    #   }
+    # This method returns the result of the HTTP request
+    #
+    def self.update_source(user)
+      payload = user.user_info
 
-    #   # if async
-    #   #   PerformHttpRequest.perform_async(action: :patch, url: , body: payload.to_json, headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" })
-    #   #   HTTParty.patch(
-    #   #     "#{Rails.application.secrets["ip_root_url"]}/api/update_account_settings",
-    #   #     body: payload.to_json,
-    #   #     headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
-    #   #   )
-    #   # else
-    #     @response = HTTParty.patch(
-    #       "#{Rails.application.secrets["ip_root_url"]}/api/update_account_settings",
-    #       body: payload.to_json,
-    #       headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
-    #     )
-    #   # end
-    # end
+      HTTParty.patch(
+        "#{GgIpClientMate::Config.oauth_provider_uri}/api/update_account_settings",
+        body: payload.to_json,
+        headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
+      )
+    end
   end
 end

@@ -19,6 +19,10 @@ module GgIpClientMate
     Oauth::UserInfo.find_and_update_or_create_user(token_and_refresh: token_and_refresh, user: user)
   end
 
+  def self.update_source(user)
+    Oauth::UserInfo.update_source(user)
+  end
+
   def self.revoke(user)
     Oauth::OpenIdConnectClient.new.revoke(user)
   end
