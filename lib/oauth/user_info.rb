@@ -41,19 +41,26 @@ module Oauth
     # @param [Object] user - object representing the user whose access token needs
     # to be refreshed
     #
+    # @throws GgIpClientMate::InvalidAuthorizationGrantError if an error occurs during the token retrieval process.
+    #
     # If the request is successful, the method returns a hash containing two keys:
     # user_token and user_refresh_token. The value of the user_token key is the
     # new access token obtained from the IP, while the value of the user_refresh_token
     # key is the new refresh token obtained from the OIDC provider.
     #
     def self.get_new_token_and_refresh(user)
+      token = user.send(GgIpClientMate::Config.oauth_refresh_token_attribute_name)
+      body = "grant_type=refresh_token&client_id=#{GgIpClientMate::Config.client_identifier}&client_secret="\
+             "#{GgIpClientMate::Config.client_secret}&refresh_token=#{token}"
       response = HTTParty.post(
-        ::OpenIdConnectClient.discover.token_endpoint,
+        OpenIdConnectClient.discover.token_endpoint,
         headers: { 'Content-Type' => 'application/x-www-form-urlencoded' },
-        body: "grant_type=refresh_token&client_id=#{GgIpClientMate::Config.client_identifier}&client_secret=#{GgIpClientMate::Config.client_secret}&refresh_token=#{user.send(GgIpClientMate::Config.oauth_refresh_token_attribute_name)}"
+        body: body
       )
 
       response_body = JSON.parse(response.body)
+      raise ::GgIpClientMate::InvalidAuthorizationGrantError if response_body['error'].present?
+
       {
         user_token: response_body['access_token'],
         user_refresh_token: response_body['refresh_token']
