@@ -121,12 +121,13 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-darwin-22
 
 DEPENDENCIES
   gg_ip_client_mate!
   httparty
-  rake (~> 13.0)
-  rubocop (~> 1.50)
+  rake
+  rubocop
 
 BUNDLED WITH
    2.3.14
