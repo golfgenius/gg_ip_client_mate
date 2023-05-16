@@ -1,0 +1,30 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@1.4.0
+
+jobs:
+  build_and_test:
+    docker:
+      - image: cimg/ruby:3.2.2
+    executor: ruby/default
+    steps:
+      - checkout
+      - run:
+          name: Bundle Install
+          command: gem install bundler
+      - run:
+          name: Which bundler?
+          command: bundle -v
+      - run: # Install Ruby dependencies
+          name: Bundle Install
+          command: bundle install
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop --parallel
+
+workflows:
+  build:
+    jobs:
+      - build_and_test
+
