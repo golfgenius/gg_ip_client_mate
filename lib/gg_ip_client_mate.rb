@@ -33,4 +33,6 @@ module GgIpClientMate
 end
 
 require 'gg_ip_client_mate/config'
+require 'gg_ip_client_mate/errors'
+
 require 'oauth/oauth'
