@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: '3.0'
+  TargetRubyVersion: '3.2.2'
   NewCops: enable
 require:
   - rubocop-rails
@@ -31,4 +31,6 @@ Layout/LineLength:
 Lint/MissingSuper:
   Enabled: false
 Lint/AmbiguousBlockAssociation:
+  Enabled: false
+Style/HashSyntax:
   Enabled: false

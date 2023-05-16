@@ -8,3 +8,4 @@ gemspec
 gem 'httparty'
 gem 'rake'
 gem 'rubocop'
+gem 'rubocop-rails'

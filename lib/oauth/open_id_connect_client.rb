@@ -95,7 +95,9 @@ module Oauth
     def revoke(user)
       revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
 
-      HTTParty.send(:post, revocation_endpoint, 
+      HTTParty.send(
+        :post,
+        revocation_endpoint,
         body: {
           token: user.oauth_token,
           client_id: GgIpClientMate::Config.client_identifier,
@@ -104,7 +106,8 @@ module Oauth
         headers: {
           'Content-Type' => 'application/json',
           'Authorization' => "Bearer #{user.oauth_token}"
-        })
+        }
+      )
     end
 
     private

@@ -50,7 +50,7 @@ module Oauth
     #
     def self.get_new_token_and_refresh(user)
       token = user.send(GgIpClientMate::Config.oauth_refresh_token_attribute_name)
-      body = "grant_type=refresh_token&client_id=#{GgIpClientMate::Config.client_identifier}&client_secret="\
+      body = "grant_type=refresh_token&client_id=#{GgIpClientMate::Config.client_identifier}&client_secret=" \
              "#{GgIpClientMate::Config.client_secret}&refresh_token=#{token}"
       response = HTTParty.post(
         OpenIdConnectClient.discover.token_endpoint,
@@ -123,7 +123,7 @@ module Oauth
     end
 
     #
-    # The user_create_or_update_with_associations method creates or updates a user record in the 
+    # The user_create_or_update_with_associations method creates or updates a user record in the
     # local application database with the latest token and refresh token information obtained
     # from an IP and user information associated with the user's IP account.
     #
@@ -137,10 +137,10 @@ module Oauth
       return if user_info.blank?
 
       user = if user.present?
-              assign_user_attributes_and_save(user, token_and_refresh, user_info)
-            else
-              assign_user_attributes_and_save(User.new, token_and_refresh, user_info)
-            end
+               assign_user_attributes_and_save(user, token_and_refresh, user_info)
+             else
+               assign_user_attributes_and_save(User.new, token_and_refresh, user_info)
+             end
 
       user&.reload
     end
@@ -160,7 +160,7 @@ module Oauth
     def self.user_attributes(user_info, token_and_refresh)
       attrs = {
         GgIpClientMate::Config.oauth_token_attribute_name => token_and_refresh[:user_token],
-        GgIpClientMate::Config.oauth_refresh_token_attribute_name => token_and_refresh[:user_refresh_token],
+        GgIpClientMate::Config.oauth_refresh_token_attribute_name => token_and_refresh[:user_refresh_token]
       }
 
       GgIpClientMate::Config.user_info_attribute_mapping.each do |key, doorkeeper_key|
