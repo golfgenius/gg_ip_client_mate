@@ -180,12 +180,14 @@ module Oauth
     #
     def self.update_source(user)
       payload = user.user_info
-
-      HTTParty.patch(
+      response = HTTParty.patch(
         "#{GgIpClientMate::Config.oauth_provider_uri}/api/update_account_settings",
         body: payload.to_json,
         headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
       )
+
+      return true if response.code == 200
+      raise ::GgIpClientMate::InvalidAuthorizationGrantError if response.code == 401
     end
   end
 end
