@@ -117,7 +117,7 @@ module Oauth
     #
     def self.assign_user_attributes_and_save(user, token_and_refresh, user_info)
       user.assign_attributes_and_association_attributes(user_attributes(user_info, token_and_refresh))
-      user.save!
+      user.save_with_associations
 
       user
     end
@@ -175,19 +175,57 @@ module Oauth
     # PATCH request to the /api/update_account_settings endpoint with the updated payload
     #
     # @param [Object] user - object representing the user
+    # @param [Boolean] avatar_changed - optional - true when avatar is changed
     #
     # This method returns the result of the HTTP request
     #
-    def self.update_source(user)
+    def self.update_source(user, avatar_changed: false)
       payload = user.user_info
+      payload[:avatar_changed] = avatar_changed
       response = HTTParty.patch(
         "#{GgIpClientMate::Config.oauth_provider_uri}/api/update_account_settings",
         body: payload.to_json,
-        headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.oauth_token}" }
+        headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.send(GgIpClientMate::Config.oauth_token_attribute_name)}" }
       )
 
       return true if response.code == 200
       raise ::GgIpClientMate::InvalidAuthorizationGrantError if response.code == 401
+    end
+
+    #
+    # The update_password method updates user's password using an IP API
+    #
+    # user [Object] user - object representing the user
+    # new_password [String]- The new password to be set.
+    # password_confirmation [String]- The confirmation of the new password.
+    # password [String] - The current password for authentication.
+    #
+    # Returns a Hash containing the response code and error message, if any.
+    #
+    def self.update_password(user, new_password, password_confirmation, password)
+      @response = HTTParty.get(
+        "#{GgIpClientMate::Config.oauth_provider_uri}/api/check_password",
+        body: { password: password }.to_json,
+        headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.send(GgIpClientMate::Config.oauth_token_attribute_name)}" }
+      )
+
+      if @response.code != 200
+        return {
+          code: @response.code,
+          error_message: @response.body
+        }
+      end
+
+      @response = HTTParty.patch(
+        "#{GgIpClientMate::Config.oauth_provider_uri}/api/update_password",
+        body: { password: new_password, password_confirmation: password_confirmation }.to_json,
+        headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.send(GgIpClientMate::Config.oauth_token_attribute_name)}" }
+      )
+
+      {
+        code: @response.code,
+        error_message: @response.body
+      }
     end
   end
 end
