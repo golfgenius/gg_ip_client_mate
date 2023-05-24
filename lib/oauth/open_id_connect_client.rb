@@ -92,6 +92,17 @@ module Oauth
       end
     end
 
+    #
+    # This method revokes an OAuth token for a given user. It sends a revocation
+    # request to the revocation endpoint of an OAuth provider to invalidate the
+    # token.
+    #
+    # @param [Object] user - representing the user for whom the OAuth token should
+    #                        be revoked. The user object must have an oauth_token
+    #                        attribute containing the OAuth token to be revoked.
+    #
+    # This method returns the result of the HTTP request
+    #
     def revoke(user)
       revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
 
