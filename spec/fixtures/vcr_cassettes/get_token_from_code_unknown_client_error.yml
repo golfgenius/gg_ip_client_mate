@@ -1,0 +1,121 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://test-identiy-provider.com/.well-known/openid-configuration
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - SWD 2.0.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"acf7db2bda057f0505839af36ab800fd"
+      Ngrok-Trace-Id:
+      - 8667100f685996f91cf0c7a337c1a8cb
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.22, process_action.action_controller;dur=1.42
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 3793164d-2b18-447f-890d-e9ec5ab4f84a
+      X-Runtime:
+      - '0.015349'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 08:35:57 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"issuer":"https://test-identiy-provider.com","authorization_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/authorize","token_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/token","revocation_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/revoke","introspection_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/introspect","userinfo_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/userinfo","jwks_uri":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/discovery/keys","end_session_endpoint":"https://test-identiy-provider.com/logout","scopes_supported":["openid"],"response_types_supported":["code","token","id_token","id_token
+        token"],"response_modes_supported":["query","fragment","form_post"],"grant_types_supported":["authorization_code","implicit_oidc","refresh_token"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"],"claim_types_supported":["normal"],"claims_supported":["iss","sub","aud","exp","iat","email","first_name","last_name","phone","phone_prefix","phone_prefix_country","gender","ghin_number"]}'
+  recorded_at: Fri, 26 May 2023 08:35:57 GMT
+- request:
+    method: post
+    uri: http://9f8a-136-255-180-91.ngrok-free.app/oauth/token
+    body:
+      encoding: UTF-8
+      string: code=validCode&grant_type=authorization_code&redirect_uri=http%3A%2F%2Ftest-client.com%2Foauth_login
+    headers:
+      User-Agent:
+      - Rack::OAuth2 (2.2.0)
+      Authorization:
+      - Basic eVBKX2dQdlBYTnRsY2h3aDhQZ2lLMTItQkR3UXdCYjlYZ1RfSVBfQ0wxM05UOjRPclpCQ2hhZXl5aGM2Zmtrb1RuSGt2VGdIc1dKUUNwQ2pMVUlQX0NMMTNOVFI=
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - application/json; charset=utf-8
+      Ngrok-Trace-Id:
+      - 3fdc0c697cb3e6dbda61e392b2e4229c
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.26, sql.active_record;dur=3.93, instantiation.active_record;dur=0.10,
+        process_action.action_controller;dur=6.94
+      Vary:
+      - Accept
+      Www-Authenticate:
+      - Bearer realm="Doorkeeper", error="invalid_client", error_description="Client
+        authentication failed due to unknown client, no client authentication included,
+        or unsupported authentication method."
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - '059f8f43-bdbf-417f-bd72-724f86fe12d1'
+      X-Runtime:
+      - '0.016835'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 08:35:57 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"error":"invalid_client","error_description":"Client authentication
+        failed due to unknown client, no client authentication included, or unsupported
+        authentication method."}'
+  recorded_at: Fri, 26 May 2023 08:35:57 GMT
+recorded_with: VCR 6.1.0
