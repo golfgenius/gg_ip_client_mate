@@ -156,7 +156,7 @@ PLATFORMS
 
 DEPENDENCIES
   gg_ip_client_mate!
-  httparty
+  httparty (>= 0.21.0)
   pry
   rake
   rspec

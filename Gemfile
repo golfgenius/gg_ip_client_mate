@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in gg_ip_client_mate.gemspec
 gemspec
 
-gem 'httparty'
+gem 'httparty', '>= 0.21.0'
 gem 'rake'
 gem 'rubocop'
 gem 'rubocop-rails'
