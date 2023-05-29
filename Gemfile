@@ -8,6 +8,7 @@ gemspec
 gem 'httparty'
 gem 'rake'
 gem 'rubocop'
+gem 'rubocop-rails'
 
 group :development, :test do
   gem 'pry'

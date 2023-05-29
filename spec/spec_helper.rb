@@ -1,6 +1,6 @@
 require 'bundler/setup'
 require 'gg_ip_client_mate'
-require './spec/support/vcr_setup.rb'
+require './spec/support/vcr_setup'
 require 'pry'
 
 RSpec.configure do |config|

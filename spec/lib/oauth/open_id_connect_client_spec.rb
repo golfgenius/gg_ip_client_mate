@@ -23,7 +23,7 @@ RSpec.describe Oauth::OpenIdConnectClient do
         expect(discover.authorization_endpoint).to eql 'https://test-identiy-provider.com/oauth/authorize'
         expect(discover.userinfo_endpoint).to eql 'https://test-identiy-provider.com/oauth/userinfo'
         expect(discover.token_endpoint).to eql 'https://test-identiy-provider.com/oauth/token'
-        expect(discover.claims_supported).to eql ['iss', 'sub', 'aud', 'exp', 'iat', 'email', 'first_name', 'last_name', 'phone', 'phone_prefix', 'phone_prefix_country', 'gender', 'ghin_number']
+        expect(discover.claims_supported).to eql %w[iss sub aud exp iat email first_name last_name phone phone_prefix phone_prefix_country gender ghin_number]
         expect(discover.end_session_endpoint).to eql 'https://test-identiy-provider.com/logout'
       end
     end
@@ -33,10 +33,12 @@ RSpec.describe Oauth::OpenIdConnectClient do
     it 'returns a hash containing the user token and refresh token when valid token' do
       VCR.use_cassette('get_token_from_code') do
         token_and_refresh = Oauth::OpenIdConnectClient.new.get_token_from_code('customC0de')
-        expect(token_and_refresh).to eql({
-          user_token: 'accessT0ken',
-          user_refresh_token: 'refreshT0ken'
-        })
+        expect(token_and_refresh).to eql(
+          {
+            user_token: 'accessT0ken',
+            user_refresh_token: 'refreshT0ken'
+          }
+        )
       end
     end
 
@@ -57,7 +59,7 @@ RSpec.describe Oauth::OpenIdConnectClient do
   end
 
   describe '#revoke' do
-    let(:user) { Struct.new(:oauth_token).new(oauth_token: "activeToken") }
+    let(:user) { Struct.new(:oauth_token).new(oauth_token: 'activeToken') }
 
     it 'revokes an OAuth token for a given user' do
       VCR.use_cassette('revoke_token') do

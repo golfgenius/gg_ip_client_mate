@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://test-identiy-provider.com/api/update_account_settings
+    body:
+      encoding: UTF-8
+      string: '{"first_name":"Dover","avatar_changed":true}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer oauthToken
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      Cache-Control:
+      - no-cache
+      Location:
+      - "/"
+      Ngrok-Trace-Id:
+      - c17200f06efa53e302598cd55d7f9c28
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.17, sql.active_record;dur=49.28,
+        instantiation.active_record;dur=17.12, unpermitted_parameters.action_controller;dur=0.20,
+        process_action.action_controller;dur=71.31
+      Set-Cookie:
+      - gg_ip_session_key=fda0a463f27ba2258cc2cfcc6d264bd8; path=/; HttpOnly; SameSite=Lax
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 5b816b6b-9e9f-4be8-9e4c-6d2667c71a20
+      X-Runtime:
+      - '0.265532'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 14:45:12 GMT
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Fri, 26 May 2023 14:45:12 GMT
+recorded_with: VCR 6.1.0

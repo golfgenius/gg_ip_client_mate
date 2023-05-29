@@ -1,0 +1,118 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://test-identiy-provider.com/.well-known/openid-configuration
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - SWD 2.0.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"acf7db2bda057f0505839af36ab800fd"
+      Ngrok-Trace-Id:
+      - afa426f7780cf015dd247bb524dcb75e
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.22, process_action.action_controller;dur=1.25
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 878b3a71-824f-4d99-835a-e691abf3327b
+      X-Runtime:
+      - '0.014803'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 10:31:30 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"issuer":"https://test-identiy-provider.com","authorization_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/authorize","token_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/token","revocation_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/revoke","introspection_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/introspect","userinfo_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/userinfo","jwks_uri":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/discovery/keys","end_session_endpoint":"https://test-identiy-provider.com/logout","scopes_supported":["openid"],"response_types_supported":["code","token","id_token","id_token
+        token"],"response_modes_supported":["query","fragment","form_post"],"grant_types_supported":["authorization_code","implicit_oidc","refresh_token"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"],"claim_types_supported":["normal"],"claims_supported":["iss","sub","aud","exp","iat","email","first_name","last_name","phone","phone_prefix","phone_prefix_country","gender","ghin_number"]}'
+  recorded_at: Fri, 26 May 2023 10:31:30 GMT
+- request:
+    method: get
+    uri: http://9f8a-136-255-180-91.ngrok-free.app/oauth/userinfo
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer 8aCGrR1MBAWOPNdqjFdlhEagVsIuOpHMdDxrIWh7hXg
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"de8359c18cfb79f47de8b51aca759055"
+      Ngrok-Trace-Id:
+      - d38e63c4c0001596de9cda7df77eed92
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.31, sql.active_record;dur=9.21, instantiation.active_record;dur=0.36,
+        process_action.action_controller;dur=14.01
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 68e99a9a-9bd1-47b4-98ac-238577abc78b
+      X-Runtime:
+      - '0.026219'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 10:31:30 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"sub":"1","email":"admin@ggidentity.com","first_name":"GolfGenius","last_name":"Identity
+        Admin12","phone":"078888888","phone_prefix":"+61","phone_prefix_country":"AU","gender":"F","ghin_number":"888888"}'
+  recorded_at: Fri, 26 May 2023 10:31:30 GMT
+recorded_with: VCR 6.1.0

@@ -1,0 +1,116 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://test-identiy-provider.com/.well-known/openid-configuration
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - SWD 2.0.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"acf7db2bda057f0505839af36ab800fd"
+      Ngrok-Trace-Id:
+      - 06bee1ded59c5aa6e61956daead6a878
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.15, process_action.action_controller;dur=1.04
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - f1aab850-00ec-4c80-925a-ad078c3e9483
+      X-Runtime:
+      - '0.014219'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 10:33:22 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"issuer":"https://test-identiy-provider.com","authorization_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/authorize","token_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/token","revocation_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/revoke","introspection_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/introspect","userinfo_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/userinfo","jwks_uri":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/discovery/keys","end_session_endpoint":"https://test-identiy-provider.com/logout","scopes_supported":["openid"],"response_types_supported":["code","token","id_token","id_token
+        token"],"response_modes_supported":["query","fragment","form_post"],"grant_types_supported":["authorization_code","implicit_oidc","refresh_token"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"],"claim_types_supported":["normal"],"claims_supported":["iss","sub","aud","exp","iat","email","first_name","last_name","phone","phone_prefix","phone_prefix_country","gender","ghin_number"]}'
+  recorded_at: Fri, 26 May 2023 10:33:22 GMT
+- request:
+    method: get
+    uri: http://9f8a-136-255-180-91.ngrok-free.app/oauth/userinfo
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer invalidToken
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - text/html
+      Ngrok-Trace-Id:
+      - c677b7966069597c89a0cac134c28657
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.22, sql.active_record;dur=2.50, instantiation.active_record;dur=0.02,
+        halted_callback.action_controller;dur=0.15, process_action.action_controller;dur=6.22
+      Www-Authenticate:
+      - Bearer realm="Doorkeeper", error="invalid_token", error_description="The access
+        token is invalid"
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 18edfa01-4026-45ed-a1f3-68d33289f80f
+      X-Runtime:
+      - '0.018743'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 10:33:22 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Fri, 26 May 2023 10:33:22 GMT
+recorded_with: VCR 6.1.0
