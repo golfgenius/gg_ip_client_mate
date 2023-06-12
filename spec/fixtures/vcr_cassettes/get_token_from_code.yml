@@ -1,0 +1,117 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://test-identiy-provider.com/.well-known/openid-configuration
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - SWD 2.0.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"acf7db2bda057f0505839af36ab800fd"
+      Ngrok-Trace-Id:
+      - 21cb70bc631412b1b104666b978222f1
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.25, process_action.action_controller;dur=1.66
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 4fb3ce74-0b2c-42b9-982b-5b3382e3ef90
+      X-Runtime:
+      - '0.015318'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 08:38:15 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"issuer":"https://test-identiy-provider.com","authorization_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/authorize","token_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/token","revocation_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/revoke","introspection_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/introspect","userinfo_endpoint":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/userinfo","jwks_uri":"http://9f8a-136-255-180-91.ngrok-free.app/oauth/discovery/keys","end_session_endpoint":"https://test-identiy-provider.com/logout","scopes_supported":["openid"],"response_types_supported":["code","token","id_token","id_token
+        token"],"response_modes_supported":["query","fragment","form_post"],"grant_types_supported":["authorization_code","implicit_oidc","refresh_token"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"],"claim_types_supported":["normal"],"claims_supported":["iss","sub","aud","exp","iat","email","first_name","last_name","phone","phone_prefix","phone_prefix_country","gender","ghin_number"]}'
+  recorded_at: Fri, 26 May 2023 08:38:15 GMT
+- request:
+    method: post
+    uri: http://9f8a-136-255-180-91.ngrok-free.app/oauth/token
+    body:
+      encoding: UTF-8
+      string: code=customC0de&grant_type=authorization_code&redirect_uri=http%3A%2F%2Ftest-client.com%2Foauth_login
+    headers:
+      User-Agent:
+      - Rack::OAuth2 (2.2.0)
+      Authorization:
+      - Basic eVBKX2dQdlBYTnRsY2h3aDhQZ2lLMTItQkR3UXdCYjlYZ1RfSVBfQ0wxM05UOjRPclpCQ2hhZXl5aGM2Zmtrb1RuSGt2VGdIc1dKUUNwQ2pMVUlQX0NMMTNOVA==
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"305ec8fd4dc9ae28e7c9006cd0f46496"
+      Ngrok-Trace-Id:
+      - f2e48b4e5667bd02c9a986d18f335e35
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.22, sql.active_record;dur=48.41,
+        instantiation.active_record;dur=0.46, process_action.action_controller;dur=62.18
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - ecb1e339-2b6d-4ce8-8db3-5c4dd763d258
+      X-Runtime:
+      - '0.072013'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Fri, 26 May 2023 08:38:15 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"accessT0ken","token_type":"Bearer","expires_in":21600,"refresh_token":"refreshT0ken","scope":"openid","created_at":1685090295,"id_token":"eyJraWQiOiJiYTBmMDliZTE4YWQ5ZWNkMDdkNWNkM2Y3M2JjNTQ4N2RjOGVjNzE4Yjk5MDk1OTQxZDc0MTlmYjNjOGQ2NDMwIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovLzlmOGEtMTM2LTI1NS0xODAtOTEubmdyb2stZnJlZS5hcHAiLCJzdWIiOiIxIiwiYXVkIjoieVBKX2dQdlBYTnRsY2h3aDhQZ2lLMTItQkR3UXdCYjlYZ1RfSVBfQ0wxM05UIiwiZXhwIjoxNjg1MDkwNDE1LCJpYXQiOjE2ODUwOTAyOTUsImF1dGhfdGltZSI6MTY4NDkzNzEyMH0.Tatyz7S2X9ThrVeRV-BvjLzY3TlPPCK-0DGOHrRws6ZcJdmQvg_B2U16kyvHdltQ-l6m_DZQE3AhbrqW_ojvwLaJG_6Iia1GxNRbEaicUdhWF-OhfoNbZCypCIzsEAMd-NJlZNowout-rJkNRJOw_Po17gaKY6oyolI0tYhqEPMVi6C5JTjfEGZRme38lm8P1FUvTcg53k35fOfQ0xjReYgQKqOcZuZMuJYkSA1yeUqHU_BW1-_nBf6QCb4_O2SmmbW0n2S5DMxUjmRd7659BhPZLUDJO2UJu3KhLZKNK286rPG0ctWzyn3lgdOzGIQQYVecZ80Lx6tE0JCZU12wuQ"}'
+  recorded_at: Fri, 26 May 2023 08:38:15 GMT
+recorded_with: VCR 6.1.0

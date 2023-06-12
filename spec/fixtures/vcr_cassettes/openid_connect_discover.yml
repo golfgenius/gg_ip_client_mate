@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://test-identiy-provider.com/.well-known/openid-configuration
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - SWD 2.0.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"acf7db2bda057f0505839af36ab800fd"
+      Ngrok-Trace-Id:
+      - fa59283cacd4ffa3df05ae70345592b3
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server-Timing:
+      - start_processing.action_controller;dur=0.15, process_action.action_controller;dur=1.64
+      Vary:
+      - Accept
+      X-Content-Type-Options:
+      - nosniff
+      X-Download-Options:
+      - noopen
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - ddae6b01-045c-4c39-af36-4dfa10253d4c
+      X-Runtime:
+      - '0.017840'
+      X-Xss-Protection:
+      - '0'
+      Date:
+      - Thu, 25 May 2023 14:17:48 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"issuer":"https://test-identiy-provider.com","authorization_endpoint":"https://test-identiy-provider.com/oauth/authorize","token_endpoint":"https://test-identiy-provider.com/oauth/token","revocation_endpoint":"https://test-identiy-provider.com/oauth/revoke","introspection_endpoint":"https://test-identiy-provider.com/oauth/introspect","userinfo_endpoint":"https://test-identiy-provider.com/oauth/userinfo","jwks_uri":"https://test-identiy-provider.com/oauth/discovery/keys","end_session_endpoint":"https://test-identiy-provider.com/logout","scopes_supported":["openid"],"response_types_supported":["code","token","id_token","id_token
+        token"],"response_modes_supported":["query","fragment","form_post"],"grant_types_supported":["authorization_code","implicit_oidc","refresh_token"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"],"claim_types_supported":["normal"],"claims_supported":["iss","sub","aud","exp","iat","email","first_name","last_name","phone","phone_prefix","phone_prefix_country","gender","ghin_number"]}'
+  recorded_at: Thu, 25 May 2023 14:17:48 GMT
+recorded_with: VCR 6.1.0
