@@ -18,14 +18,26 @@ Initialize GgIpClientMate config variables:
   GgIpClientMate::Config.client_secret = Rails.application.secrets["oauth_client_secret"] # This variable is used to set the OAuth client secret provided by the IP application. It is typically used in conjunction with the client ID to authenticate the client application with the IP.
   GgIpClientMate::Config.oauth_provider_uri = Rails.application.secrets["oauth_provider_uri"] # This variable is used to set the URI for the IP application, which is used to initiate the OAuth authentication flow. This URI should have an HTTPS prefix for security reason
 
-  GgIpClientMate::Config.redirect_uri ||= '...' # This variable is used to set the URI where the IP application will redirect the user after they have authenticated and granted access to their information. This URI should be responsible for exchanging the IP code for a user token and refresh token.
-  GgIpClientMate::Config.root_uri ||= '...' #  This variable is used to set the root URI for the client application, which is where the user will be redirected after logging out of the IP application.
+  GgIpClientMate::Config.redirect_uri = '...' # This variable is used to set the URI where the IP application will redirect the user after they have authenticated and granted access to their information. This URI should be responsible for exchanging the IP code for a user token and refresh token.
+  GgIpClientMate::Config.root_uri = '...' #  This variable is used to set the root URI for the client application, which is where the user will be redirected after logging out of the IP application.
 
   GgIpClientMate::Config.oauth_token_attribute_name = '...' # This variable represents the attribute name on User model that is used to store an access token that is issued by an OAuth provider to authorize third-party applications in order to access a user's protected resources.
   GgIpClientMate::Config.oauth_refresh_token_attribute_name = '...' # This variable represents the attribute name that is used to store the refresh_token that needed to obtain a new access token when the current access token expires in OAuth authentication.
   GgIpClientMate::Config.external_id_attribute_name = '...'  # This variable represents the attribute name used to link a user on the client application with the corresponding user on the identity provider application( external_id )
   GgIpClientMate::Config.user_info_attribute_mapping = { ... } # This variable represents a hash used for mapping all the user attributes with the doorkeeper attributes
 ```
+
+The recommended way to initialize GgIpClientMate config variables is to create a new file inside the config/initializers directory. You can name it anything you like, for example, `gg_ip_client_mate_config.rb`.
+Inside the initializer file, you need to add the necessary configurations. However, it's **_important_** to note that the initializer does not have direct access to the application routes. To overcome this, you should initialize the configurations within a `Rails.application.config.after_initialize` block. Here's an example:
+```ruby
+Rails.application.config.after_initialize do
+  Rails.application.reload_routes!
+
+  GgIpClientMate::Config.redirect_uri = Rails.application.routes.url_helpers.oauth_login_url
+  GgIpClientMate::Config.root_uri = Rails.application.routes.url_helpers.root_url
+end
+```
+Feel free to modify these configurations based on your specific needs.
 
 ## Usage
 
