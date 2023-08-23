@@ -111,6 +111,15 @@ When updating User password from the client app, the client need to check that c
   GgIpClientMate.update_password(user, new_password, password_confirmation, password)
 ```
 
+#### Create associated user (with username)
+When the client application intends to create accounts using a username, if the corresponding action is permitted from the given IP applicaiton, the client must invoke this action. This invocation initiates user creation both on the IP side and the client side.
+```ruby
+  GgIpClientMate.create_associated_user(
+    user,
+    { first_name: '...', last_name: '...', phone: '...', phone_prefix: '...', phone_prefix_country: '...', gender: '...', username: '...', password: '...' }
+  )
+```
+
 #### Revoke existing session and logout user from client app and from IP
 When a user wants to log out of the client application, before clearing the cookie, the token and refresh token needs to be revoked and the IP session needs to be destroyed
 Add this to the session destrio controler action

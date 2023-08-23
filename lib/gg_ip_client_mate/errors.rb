@@ -15,4 +15,14 @@ module GgIpClientMate
         'or was issued to another client. Please sign in again.'
     end
   end
+
+  #
+  # Custom InvalidRequestError error class
+  #
+  # @param [String] message - the error message
+  #
+  # Returns an error message describing the problem.
+  #
+  class InvalidRequestError < StandardError; end
+
 end
