@@ -1,0 +1,60 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://test-identiy-provider.com/api/user_create
+    body:
+      encoding: UTF-8
+      string: '{"first_name":"Ben","last_name":"Dover","phone":"1234567890","phone_prefix":"+40","phone_prefix_country":"RO","gender":"F","username":"bendover","password":"password123"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer oauthToken
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Request-Method:
+      - "*"
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - text/html
+      Ngrok-Trace-Id:
+      - a82fd1053c8ca718ec1a8ab412db23cc
+      P3p:
+      - CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"
+      Pragma:
+      - no-cache
+      Vary:
+      - Origin
+      Www-Authenticate:
+      - Bearer realm="Doorkeeper", error="invalid_token", error_description="The access
+        token is invalid"
+      X-Frame-Options:
+      - ALLOWALL
+      X-Request-Id:
+      - cf0740e8-21c8-4142-8303-1b63f1bedd01
+      X-Runtime:
+      - '0.186572'
+      X-Ua-Compatible:
+      - IE=edge
+      Date:
+      - Wed, 23 Aug 2023 14:41:44 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Wed, 23 Aug 2023 14:41:44 GMT
+recorded_with: VCR 6.1.0

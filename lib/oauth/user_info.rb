@@ -228,5 +228,35 @@ module Oauth
         error_message: @response.body
       }
     end
+
+    #
+    # This method revokes creates a new user in the IP by sending a POST request to the /api/user_create endpoint with the new user details. User is created with a specific username instead of email
+    #
+    # @param [Object] user - object - representing the user who creates the new user instance
+    # @param [Object] user_details  - representing the user info that will be created (first_name, last_name, phone, phone_prefix, phone_prefix_country, gender, ghin_number, username, password)
+    #
+    # The method returns the newly created user object or a hash containing the response code and error message, if any.
+    #
+    def self.create_associated_user(user, user_details)
+      response = HTTParty.post(
+        "#{GgIpClientMate::Config.oauth_provider_uri}/api/user_create",
+        body: user_details.to_json,
+        headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.send(GgIpClientMate::Config.oauth_token_attribute_name)}" }
+      )
+
+      response_body_present = response.body.present?
+      response_body = JSON.parse(response.body) if response_body_present
+      if response.code == 401
+        raise ::GgIpClientMate::InvalidAuthorizationGrantError unless response_body_present
+
+        raise ::GgIpClientMate::InvalidRequestError, response_body['error']
+      end
+
+      raise ::GgIpClientMate::InvalidAuthorizationGrantError if response.code == 401
+      raise ::GgIpClientMate::InvalidRequestError, response_body['error'] if response.code == 409
+      raise ::GgIpClientMate::InvalidRequestError, response_body['errors'].join('; ') if response.code == 422
+
+      return user_create_or_update_with_associations(nil, {}, response_body['user']) if response.success?
+    end
   end
 end

@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://test-identiy-provider.com/api/user_create
+    body:
+      encoding: UTF-8
+      string: '{"first_name":"Ben","last_name":"Dover","phone":"1234567890","phone_prefix":"+40","phone_prefix_country":"RO","gender":"F","username":"bendover","password":"password123"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer secret_token
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Request-Method:
+      - "*"
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Ngrok-Trace-Id:
+      - 7b8fec9bcd976e34548aa5a6f1e5cab8
+      P3p:
+      - CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"
+      Vary:
+      - Origin
+      X-Frame-Options:
+      - ALLOWALL
+      X-Request-Id:
+      - 5ca9f60d-efaf-4ada-8169-69343ee09f38
+      X-Runtime:
+      - '0.187396'
+      X-Ua-Compatible:
+      - IE=edge
+      Date:
+      - Thu, 24 Aug 2023 07:31:45 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"error":"Your application is not authorized to perform this action"}'
+  recorded_at: Thu, 24 Aug 2023 07:31:45 GMT
+recorded_with: VCR 6.1.0

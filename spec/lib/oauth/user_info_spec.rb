@@ -254,4 +254,67 @@ RSpec.describe Oauth::UserInfo do
       end
     end
   end
+
+  describe '#create_associated_user' do
+    let(:slim_user) do
+      Struct.new(:oauth_token, :first_name, :saved) do
+        def user_info
+          {
+            first_name: first_name
+          }
+        end
+
+        def assign_attributes_and_association_attributes(details); end
+
+        def save_with_associations
+          self.saved = true
+        end
+
+        def reload
+          self
+        end
+      end
+    end
+
+    before :each do
+      GgIpClientMate::Config.oauth_token_attribute_name = :oauth_token
+      GgIpClientMate::Config.oauth_refresh_token_attribute_name = :oauth_refresh_token
+      GgIpClientMate::Config.user_info_attribute_mapping = { firstname: 'first_name' }
+      @user = slim_user.new(oauth_token: 'secret_token', first_name: 'Dover')
+      stub_const 'User', slim_user
+      @new_user_params = { first_name: 'Ben', last_name: 'Dover', phone: '1234567890', phone_prefix: '+40', phone_prefix_country: 'RO', gender: 'F', username: 'bendover', password: 'password123' }
+    end
+
+    it 'creates new user with valid attributes' do
+      VCR.use_cassette('create_associated_user') do
+        user = Oauth::UserInfo.create_associated_user(@user, @new_user_params)
+
+        expect(user.saved).to eql(true)
+      end
+    end
+
+    it 'account with specific username exists' do
+      VCR.use_cassette('create_associated_user_fail_due_to_existing_username') do
+        expect do
+          Oauth::UserInfo.create_associated_user(@user, @new_user_params)
+        end.to raise_error(GgIpClientMate::InvalidRequestError)
+      end
+    end
+
+    it 'invalid passowrd' do
+      VCR.use_cassette('create_associated_user_fail_due_to_invalid_password') do
+        expect do
+          Oauth::UserInfo.create_associated_user(@user, { first_name: 'Ben', last_name: 'Dover', phone: '1234567890', phone_prefix: '+40', phone_prefix_country: 'RO', gender: 'F', username: 'bendover', password: '' })
+        end.to raise_error(GgIpClientMate::InvalidRequestError, "Password can't be blank; Password should include lower case characters, numbers and has minimum 8 characters")
+      end
+    end
+
+    it 'feature disabled' do
+      VCR.use_cassette('create_associated_user_fail_due_to_feature_disabled') do
+        expect do
+          Oauth::UserInfo.create_associated_user(@user, @new_user_params)
+        end.to raise_error(GgIpClientMate::InvalidRequestError, 'Your application is not authorized to perform this action')
+      end
+    end
+  end
 end
