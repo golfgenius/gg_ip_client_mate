@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://test-identiy-provider.com/api/user_create
+    body:
+      encoding: UTF-8
+      string: '{"first_name":"Ben","last_name":"Dover","phone":"1234567890","phone_prefix":"+40","phone_prefix_country":"RO","gender":"F","username":"bendover","password":"password123"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer PaLEvjX2mAaHZITRQHp8jB08STS3eCp3hoK9MjNQjoQ
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 409
+      message: Conflict
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Request-Method:
+      - "*"
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Ngrok-Trace-Id:
+      - f5e89cb2a210ec9c759070351b3652b6
+      P3p:
+      - CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"
+      Vary:
+      - Origin
+      X-Frame-Options:
+      - ALLOWALL
+      X-Request-Id:
+      - ab57e683-2c1c-405c-b85c-3a45748ee76e
+      X-Runtime:
+      - '0.182650'
+      X-Ua-Compatible:
+      - IE=edge
+      Date:
+      - Wed, 23 Aug 2023 14:44:02 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"error":"An account associated with this username already exists"}'
+  recorded_at: Wed, 23 Aug 2023 14:44:02 GMT
+recorded_with: VCR 6.1.0

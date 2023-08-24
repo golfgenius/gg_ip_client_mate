@@ -244,7 +244,14 @@ module Oauth
         headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{user.send(GgIpClientMate::Config.oauth_token_attribute_name)}" }
       )
 
-      response_body = JSON.parse(response.body) if response.body.present?
+      response_body_present = response.body.present?
+      response_body = JSON.parse(response.body) if response_body_present
+      if response.code == 401
+        raise ::GgIpClientMate::InvalidAuthorizationGrantError unless response_body_present
+
+        raise ::GgIpClientMate::InvalidRequestError, response_body['error']
+      end
+
       raise ::GgIpClientMate::InvalidAuthorizationGrantError if response.code == 401
       raise ::GgIpClientMate::InvalidRequestError, response_body['error'] if response.code == 409
       raise ::GgIpClientMate::InvalidRequestError, response_body['errors'].join('; ') if response.code == 422
