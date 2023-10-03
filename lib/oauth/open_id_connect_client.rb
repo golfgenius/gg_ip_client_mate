@@ -100,25 +100,39 @@ module Oauth
     # @param [Object] user - representing the user for whom the OAuth token should
     #                        be revoked. The user object must have an oauth_token
     #                        attribute containing the OAuth token to be revoked.
+    # @param [Boolean] api_session_revoke - optional - true when client opts for
+    #                               session destroy using API request instead
+    #                               of redirect the flow to the IP logout URL
     #
     # This method returns the result of the HTTP request
     #
-    def revoke(user)
-      revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
+    def revoke(user, api_session_revoke: false)
+      if api_session_revoke
+        HTTParty.send(
+          :delete,
+          "#{GgIpClientMate::Config.oauth_provider_uri}/api/auth/sign_out",
+          headers: {
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer #{user.oauth_token}"
+          }
+        )
+      else
+        revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
 
-      HTTParty.send(
-        :post,
-        revocation_endpoint,
-        body: {
-          token: user.oauth_token,
-          client_id: GgIpClientMate::Config.client_identifier,
-          client_secret: GgIpClientMate::Config.client_secret
-        }.to_json,
-        headers: {
-          'Content-Type' => 'application/json',
-          'Authorization' => "Bearer #{user.oauth_token}"
-        }
-      )
+        HTTParty.send(
+          :post,
+          revocation_endpoint,
+          body: {
+            token: user.oauth_token,
+            client_id: GgIpClientMate::Config.client_identifier,
+            client_secret: GgIpClientMate::Config.client_secret
+          }.to_json,
+          headers: {
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer #{user.oauth_token}"
+          }
+        )
+      end
     end
 
     private
