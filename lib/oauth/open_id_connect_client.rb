@@ -107,32 +107,7 @@ module Oauth
     # This method returns the result of the HTTP request
     #
     def revoke(user, api_session_revoke: false)
-      if api_session_revoke
-        HTTParty.send(
-          :delete,
-          "#{GgIpClientMate::Config.oauth_provider_uri}/api/auth/sign_out",
-          headers: {
-            'Content-Type' => 'application/json',
-            'Authorization' => "Bearer #{user.oauth_token}"
-          }
-        )
-      else
-        revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
-
-        HTTParty.send(
-          :post,
-          revocation_endpoint,
-          body: {
-            token: user.oauth_token,
-            client_id: GgIpClientMate::Config.client_identifier,
-            client_secret: GgIpClientMate::Config.client_secret
-          }.to_json,
-          headers: {
-            'Content-Type' => 'application/json',
-            'Authorization' => "Bearer #{user.oauth_token}"
-          }
-        )
-      end
+      api_session_revoke ? api_sign_out(user) : revoke_current_token(user)
     end
 
     private
@@ -145,6 +120,46 @@ module Oauth
     # that contains the discovered OpenID Connect provider configuration.
     def discover
       @discover ||= self.class.discover
+    end
+
+    #
+    # The api_sign_out method is a private method that calls an API endpoint in order
+    # to revoke the user session from Identiy Provider. This can be done only because
+    # IP stores session on the server side.
+    #
+    # This method returns the response of the API request -> 204 no content status
+    def api_sign_out(user)
+      HTTParty.send(
+        :delete,
+        "#{GgIpClientMate::Config.oauth_provider_uri}/api/auth/sign_out",
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{user.oauth_token}"
+        }
+      )
+    end
+
+    #
+    # The revoke_current_token method is a private method that calls an API endpoint
+    # in order to revoke the user dorkeeper token + refresh token.
+    #
+    # This method returns the response of the API request => 200 status code, json: {}
+    def revoke_current_token(user)
+      revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
+
+      HTTParty.send(
+        :post,
+        revocation_endpoint,
+        body: {
+          token: user.oauth_token,
+          client_id: GgIpClientMate::Config.client_identifier,
+          client_secret: GgIpClientMate::Config.client_secret
+        }.to_json,
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{user.oauth_token}"
+        }
+      )
     end
   end
 end
