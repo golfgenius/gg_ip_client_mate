@@ -100,10 +100,51 @@ module Oauth
     # @param [Object] user - representing the user for whom the OAuth token should
     #                        be revoked. The user object must have an oauth_token
     #                        attribute containing the OAuth token to be revoked.
+    # @param [Boolean] api_session_revoke - optional - true when client opts for
+    #                               session destroy using API request instead
+    #                               of redirect the flow to the IP logout URL
     #
     # This method returns the result of the HTTP request
     #
-    def revoke(user)
+    def revoke(user, api_session_revoke: false)
+      api_session_revoke ? api_sign_out(user) : revoke_current_token(user)
+    end
+
+    private
+
+    #
+    # The discover method is a private method that discovers the OpenID Connect
+    # provider configuration from the provided OAuth provider URI.
+    #
+    # The discover method returns an instance of OpenIDConnect::Discovery::Provider::Config
+    # that contains the discovered OpenID Connect provider configuration.
+    def discover
+      @discover ||= self.class.discover
+    end
+
+    #
+    # The api_sign_out method is a private method that calls an API endpoint in order
+    # to revoke the user session from Identiy Provider. This can be done only because
+    # IP stores session on the server side.
+    #
+    # This method returns the response of the API request -> 204 no content status
+    def api_sign_out(user)
+      HTTParty.send(
+        :delete,
+        "#{GgIpClientMate::Config.oauth_provider_uri}/api/auth/sign_out",
+        headers: {
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{user.oauth_token}"
+        }
+      )
+    end
+
+    #
+    # The revoke_current_token method is a private method that calls an API endpoint
+    # in order to revoke the user dorkeeper token + refresh token.
+    #
+    # This method returns the response of the API request => 200 status code, json: {}
+    def revoke_current_token(user)
       revocation_endpoint = discover&.raw.try(:[], 'revocation_endpoint')
 
       HTTParty.send(
@@ -119,18 +160,6 @@ module Oauth
           'Authorization' => "Bearer #{user.oauth_token}"
         }
       )
-    end
-
-    private
-
-    #
-    # The discover method is a private method that discovers the OpenID Connect
-    # provider configuration from the provided OAuth provider URI.
-    #
-    # The discover method returns an instance of OpenIDConnect::Discovery::Provider::Config
-    # that contains the discovered OpenID Connect provider configuration.
-    def discover
-      @discover ||= self.class.discover
     end
   end
 end

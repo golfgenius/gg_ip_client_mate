@@ -93,11 +93,14 @@ module GgIpClientMate
   # @param [Object] user - representing the user for whom the OAuth token should
   #                        be revoked. The user object must have an oauth_token
   #                        attribute containing the OAuth token to be revoked.
+  # @param [Boolean] api_session_revoke - optional - true when client opts for
+  #                               session destroy using API request instead
+  #                               of redirect the flow to the IP logout URL
   #
   # This method returns the result of the HTTP request
   #
-  def self.revoke(user)
-    Oauth::OpenIdConnectClient.new.revoke(user)
+  def self.revoke(user, api_session_revoke: false)
+    Oauth::OpenIdConnectClient.new.revoke(user, api_session_revoke: api_session_revoke)
   end
 
   #
