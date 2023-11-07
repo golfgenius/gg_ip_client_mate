@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Open Authorization class widely used authentication and authorization
 # protocol that enables third-party applications to access resources on behalf

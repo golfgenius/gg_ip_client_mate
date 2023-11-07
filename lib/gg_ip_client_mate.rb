@@ -110,9 +110,24 @@ module GgIpClientMate
   def self.logout_url
     Oauth::OpenIdConnectClient.new.logout_url
   end
+
+  #
+  # It is responsible for validating the signature of a webhook request.
+  #
+  # @param [Object] request - representing the webhook request that will be
+  #                           validated
+  #
+  # The method returns:
+  #   - true if webhook signature is valid
+  #   - raises exception that includes the signature validation issue
+  #
+  def self.validate_webhook_signature!(request)
+    Webhook::SignatureValidator.validate_webhook_signature!(request)
+  end
 end
 
 require 'gg_ip_client_mate/config'
 require 'gg_ip_client_mate/errors'
 
 require 'oauth/oauth'
+require 'webhook/signature_validator'

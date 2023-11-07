@@ -14,8 +14,7 @@ module GgIpClientMate
 
     class << self
       ### IP config attributes
-      attr_accessor :client_identifier, :client_secret, :oauth_provider_uri
-      attr_accessor :redirect_uri, :root_uri
+      attr_accessor :client_identifier, :client_secret, :oauth_provider_uri, :redirect_uri, :root_uri
       ########################
 
       ### User attributes
@@ -36,6 +35,15 @@ module GgIpClientMate
 
       # attribute maps all the user attributes with the doorkeeper attributes
       attr_accessor :user_info_attribute_mapping
+
+      ### Webhook attributes
+      # attribute that stores an integer number representing the agreed tolerance
+      # for webhook signature validation
+      attr_accessor :webhook_tolerance
+
+      # attribute that stores the webhook_secret_key that IP generates for each
+      # client webhook instance
+      attr_accessor :webhook_secret_key
     end
   end
 end
