@@ -22,6 +22,9 @@ module Webhook
     #
     def self.validate_webhook_signature!(request)
       body_json = JSON.parse(request.body.to_json).first
+
+      raise ::GgIpClientMate::InvalidWebhookSignatureError if request.headers['IP-Signature'].blank?
+
       header_signature_values = request.headers['IP-Signature'].split(',')
       signed_at_timestamp = Time.at(header_signature_values.first.split('=').last.to_i).utc
 
