@@ -112,17 +112,36 @@ module GgIpClientMate
   end
 
   #
-  # It is responsible for validating the signature of a webhook request.
+  # This method is responsible for validating the signature of a webhook request.
   #
   # @param [Object] request - representing the webhook request that will be
   #                           validated
+  # @param [String] special_signing_key - optional - key for signing requests
+  #                       other than GgIpClientMate::Config.webhook_secret_key
   #
   # The method returns:
   #   - true if webhook signature is valid
   #   - raises exception that includes the signature validation issue
   #
-  def self.validate_webhook_signature!(request)
-    Webhook::SignatureValidator.validate_webhook_signature!(request)
+  def self.validate_webhook_signature!(request, special_signing_key: nil)
+    special_signing_key = special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key
+    Webhook::Signature.validate_webhook_signature!(request, special_signing_key)
+  end
+
+  #
+  # This method is responsible for creating a signature string based on the payload
+  # provided and a special key needed for encryption
+  #
+  # @param [Object] payload - representing the payload for the furure request
+  #
+  # @param [String] special_signing_key - optional - key for signing requests
+  #                       other than GgIpClientMate::Config.webhook_secret_key
+  #
+  # This method returns a tring representing the signature for the future request
+  #
+  def self.sign_request(payload, special_signing_key: nil)
+    special_signing_key = special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key
+    Webhook::Signature.sign_request(payload, special_signing_key)
   end
 end
 
@@ -130,4 +149,4 @@ require 'gg_ip_client_mate/config'
 require 'gg_ip_client_mate/errors'
 
 require 'oauth/oauth'
-require 'webhook/signature_validator'
+require 'webhook/signature'
