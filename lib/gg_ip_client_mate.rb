@@ -116,6 +116,7 @@ module GgIpClientMate
   #
   # @param [Object] request - representing the webhook request that will be
   #                           validated
+  # @param [Object] payload - custom payload to test the signature
   # @param [String] special_signing_key - optional - key for signing requests
   #                       other than GgIpClientMate::Config.webhook_secret_key
   #
