@@ -19,7 +19,7 @@ module Webhook
     # the expected signature with the one provided in the request.
     # If the signatures do not match, it raises an InvalidWebhookTimestampError
     #
-    def self.validate_webhook_signature!(request, special_signing_key)
+    def self.validate_webhook_signature!(request, payload, special_signing_key)
       signature = request.headers['IP-Signature']
 
       raise ::GgIpClientMate::InvalidWebhookSignatureError if signature.blank?
@@ -31,7 +31,7 @@ module Webhook
 
       expected_signature = hexdigest(
         special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key,
-        signature_string(signed_at_timestamp, JSON.parse(request.body.to_json).first)
+        signature_string(signed_at_timestamp, payload)
       )
 
       raise ::GgIpClientMate::InvalidWebhookSignatureError if signed_payload(signature) != expected_signature

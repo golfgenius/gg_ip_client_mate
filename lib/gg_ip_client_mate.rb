@@ -123,9 +123,10 @@ module GgIpClientMate
   #   - true if webhook signature is valid
   #   - raises exception that includes the signature validation issue
   #
-  def self.validate_webhook_signature!(request, special_signing_key: nil)
+  def self.validate_webhook_signature!(request, payload: nil, special_signing_key: nil)
     special_signing_key = special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key
-    Webhook::Signature.validate_webhook_signature!(request, special_signing_key)
+    payload ||= JSON.parse(request.body.to_json).first
+    Webhook::Signature.validate_webhook_signature!(request, payload, special_signing_key)
   end
 
   #
