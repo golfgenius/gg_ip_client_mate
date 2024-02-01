@@ -151,17 +151,22 @@ module Oauth
     # user information and token and refresh token information obtained from IP.
     #
     # @param [Hash] user_info - hash thant contains all user information from IP
-    # @param [Hash] token_and_refresh - hash thant contains token and refresh token
+    # @param [Hash] token_and_refresh - optional - hash thant contains token and
+    #                                   refresh token
     #
     # This method returns a hash, which contains the values of all the attributes
     # needed to create or update a user record in the local application database
     # based on the latest information obtained from the IP.
     #
-    def self.user_attributes(user_info, token_and_refresh)
-      attrs = {
-        GgIpClientMate::Config.oauth_token_attribute_name => token_and_refresh[:user_token],
-        GgIpClientMate::Config.oauth_refresh_token_attribute_name => token_and_refresh[:user_refresh_token]
-      }
+    def self.user_attributes(user_info, token_and_refresh = nil)
+      attrs = {}
+
+      if token_and_refresh
+        attrs = {
+          GgIpClientMate::Config.oauth_token_attribute_name => token_and_refresh[:user_token],
+          GgIpClientMate::Config.oauth_refresh_token_attribute_name => token_and_refresh[:user_refresh_token]
+        }
+      end
 
       GgIpClientMate::Config.user_info_attribute_mapping.each do |key, doorkeeper_key|
         attrs[key] = user_info[doorkeeper_key]

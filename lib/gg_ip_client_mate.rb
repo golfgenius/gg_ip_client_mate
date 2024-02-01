@@ -145,6 +145,38 @@ module GgIpClientMate
     special_signing_key = special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key
     Webhook::Signature.sign_request(payload, special_signing_key)
   end
+
+  #
+  # The fetch_user_info_for_webhook requests the latest user details from IP using
+  # GET request to the /api/userinfo endpoint with the user_id and webhook_id
+  #
+  # @param [Integer] user_id - number representing the IP user id, or
+  #                           client application user external id
+  # @param [Integer] webhook_id - IP webhook id that is used to validate
+  #                             request signature
+  #
+  # This method returns the result of the HTTP request or raises error if the request failed
+  #
+  def self.fetch_user_info_for_webhook(user_id, webhook_id)
+    Webhook::UserInfo.fetch_user_info_for_webhook(user_id, webhook_id)
+  end
+
+  #
+  # The user_attributes method constructs a hash of attributes that can be used to
+  # create or update a user record in the local application database based on the
+  # user information and token and refresh token information obtained from IP.
+  #
+  # @param [Hash] user_info - hash thant contains all user information from IP
+  # @param [Hash] token_and_refresh - optional - hash thant contains token and
+  #                                   refresh token
+  #
+  # This method returns a hash, which contains the values of all the attributes
+  # needed to create or update a user record in the local application database
+  # based on the latest information obtained from the IP.
+  #
+  def self.user_attributes(user_info, token_and_refresh = nil)
+    Oauth::UserInfo.user_attributes(user_info, token_and_refresh)
+  end
 end
 
 require 'gg_ip_client_mate/config'
@@ -152,3 +184,4 @@ require 'gg_ip_client_mate/errors'
 
 require 'oauth/oauth'
 require 'webhook/signature'
+require 'webhook/user_info'
