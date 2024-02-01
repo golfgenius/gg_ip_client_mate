@@ -35,4 +35,12 @@ module GgIpClientMate
       'The webhook request signature is not valid.'
     end
   end
+
+  #
+  # Custom InvalidWebhookUserInfoRequestError error class
+  # Returns an error message describing why user info request failed
+  #
+  class InvalidWebhookUserInfoRequestError < StandardError
+  end
+
 end
