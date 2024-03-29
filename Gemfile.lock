@@ -83,7 +83,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
-    rack (3.0.7)
+    rack (3.0.10)
     rack-oauth2 (2.2.0)
       activesupport
       attr_required
@@ -153,6 +153,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   gg_ip_client_mate!
