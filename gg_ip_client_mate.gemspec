@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'Golf Genius Identity Provider Client intergration helper'
   spec.homepage = 'https://github.com/golfgenius/gg_ip_client_mate'
-  spec.required_ruby_version = '>= 3.0.0' # rubocop:disable Gemspec/RequiredRubyVersion
+  spec.required_ruby_version = '>= 2.7.1' # rubocop:disable Gemspec/RequiredRubyVersion
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/golfgenius/gg_ip_client_mate'
@@ -27,7 +27,15 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency('openid_connect', '~> 2.2.0')
+  spec.add_dependency 'httparty'
+  spec.add_dependency 'openid_connect'
+
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'rubocop-rails'
+  spec.add_development_dependency 'vcr'
+  spec.add_development_dependency 'webmock'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

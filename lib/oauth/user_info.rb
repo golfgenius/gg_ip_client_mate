@@ -31,7 +31,7 @@ module Oauth
         headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}" }
       )
 
-      return JSON.parse(response.body) if response.code == 200
+      JSON.parse(response.body) if response.code == 200
     end
 
     #
