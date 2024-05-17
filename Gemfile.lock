@@ -141,7 +141,7 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
-    vcr (6.1.0)
+    vcr (6.2.0)
     webfinger (2.1.2)
       activesupport
       faraday (~> 2.0)
@@ -153,6 +153,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   gg_ip_client_mate!
