@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'Golf Genius Identity Provider Client intergration helper'
   spec.homepage = 'https://github.com/golfgenius/gg_ip_client_mate'
-  spec.required_ruby_version = '>= 2.7.1' # rubocop:disable Gemspec/RequiredRubyVersion
+  spec.required_ruby_version = '>= 2.7.8' # rubocop:disable Gemspec/RequiredRubyVersion
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/golfgenius/gg_ip_client_mate'
