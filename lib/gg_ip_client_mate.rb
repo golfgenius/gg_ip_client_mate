@@ -39,6 +39,21 @@ module GgIpClientMate
   end
 
   #
+  # The info method makes a request to an OpenID Connect provider's userinfo
+  # endpoint to retrieve information about the user associated with the
+  # provided access token.
+  #
+  # @param [String] token - the access token provided by the IP application
+  #
+  # If the response from the userinfo endpoint has a status code of 200,
+  # the method returns a parsed JSON object representing the user information.
+  # Otherwise, the method returns nil.
+  #
+  def self.info(token)
+    Oauth::UserInfo.info(token)
+  end
+
+  #
   # The find_and_update_or_create_user method finds or creates a user record in the
   # local application database based on information obtained from the IP.
   #

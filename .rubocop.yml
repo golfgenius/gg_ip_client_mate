@@ -35,3 +35,5 @@ Lint/AmbiguousBlockAssociation:
   Enabled: false
 Style/HashSyntax:
   Enabled: false
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
