@@ -17,30 +17,30 @@ module GgIpClientMate
   end
 
   #
-  # Custom InvalidWebhookTimestampError error class
+  # Custom InvalidRequestTimestampError error class
   # Returns an error message describing that the timestamp exceds the agreed tolerance
   #
-  class InvalidWebhookTimestampError < StandardError
+  class InvalidRequestTimestampError < StandardError
     def message
-      'The webhook request timestamp exceds the agreed tolerance.'
+      'The request timestamp exceds the agreed tolerance.'
     end
   end
 
   #
-  # Custom InvalidWebhookTimestampError error class
+  # Custom InvalidRequestSignatureError error class
   # Returns an error message describing that the timestamp exceds the agreed tolerance
   #
-  class InvalidWebhookSignatureError < StandardError
+  class InvalidRequestSignatureError < StandardError
     def message
-      'The webhook request signature is not valid.'
+      'The request signature is not valid.'
     end
   end
 
   #
-  # Custom InvalidWebhookUserInfoRequestError error class
+  # Custom InvalidRequestUserInfoRequestError error class
   # Returns an error message describing why user info request failed
   #
-  class InvalidWebhookUserInfoRequestError < StandardError
+  class InvalidRequestUserInfoRequestError < StandardError
   end
 
 end
