@@ -95,15 +95,15 @@ GEM
       tzinfo
       validate_url
       webfinger (~> 2.0)
-    parallel (1.24.0)
-    parser (3.3.1.0)
+    parallel (1.25.1)
+    parser (3.3.3.0)
       ast (~> 2.4.1)
       racc
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.5)
-    racc (1.7.3)
+    racc (1.8.0)
     rack (3.0.11)
     rack-oauth2 (2.2.1)
       activesupport
@@ -113,8 +113,9 @@ GEM
       json-jwt (>= 1.11.0)
       rack (>= 2.1.0)
     rainbow (3.1.1)
-    regexp_parser (2.9.1)
-    rexml (3.2.6)
+    regexp_parser (2.9.2)
+    rexml (3.3.1)
+      strscan
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -128,7 +129,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
-    rubocop (1.63.5)
+    rubocop (1.64.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -148,6 +149,7 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    strscan (3.1.0)
     swd (2.0.3)
       activesupport (>= 3)
       attr_required (>= 0.0.5)
