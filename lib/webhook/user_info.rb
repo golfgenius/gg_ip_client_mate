@@ -24,7 +24,7 @@ module Webhook
       response = HTTParty.get(
         "#{GgIpClientMate::Config.oauth_provider_uri}/api/userinfo",
         query: payload,
-        headers: { 'Content-Type' => 'application/json', 'IP-Signature' => GgIpClientMate.sign_request(payload.to_json) }
+        headers: { 'Content-Type' => 'application/json', 'IP-Signature' => GgIpClientMate.sign_request(payload.to_json, GgIpClientMate::Config.webhook_secret_key) }
       )
 
       raise ::GgIpClientMate::InvalidWebhookUserInfoRequestError.new(message: response['error']) unless response.success?

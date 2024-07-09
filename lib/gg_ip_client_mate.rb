@@ -127,22 +127,20 @@ module GgIpClientMate
   end
 
   #
-  # This method is responsible for validating the signature of a webhook request.
+  # This method is responsible for validating the signature of a request.
   #
-  # @param [Object] request - representing the webhook request that will be
-  #                           validated
+  # @param [Object] request - representing the request that will be validated
   # @param [Object] payload - custom payload to test the signature
-  # @param [String] special_signing_key - optional - key for signing requests
-  #                       other than GgIpClientMate::Config.webhook_secret_key
+  # @param [String] special_signing_key - key for signing requests
   #
   # The method returns:
-  #   - true if webhook signature is valid
+  #   - true if request signature is valid
   #   - raises exception that includes the signature validation issue
   #
-  def self.validate_webhook_signature!(request, payload: nil, special_signing_key: nil)
-    special_signing_key = special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key
-    payload ||= JSON.parse(request.body.to_json).first
-    Webhook::Signature.validate_webhook_signature!(request, payload, special_signing_key)
+  def self.validate_request_signature!(request, payload: nil, special_signing_key: nil)
+    special_signing_key ||= GgIpClientMate::Config.webhook_secret_key
+    payload ||= JSON.parse((payload.presence || request.body).to_json).first
+    Security::Validator.validate_request_signature!(request, payload.to_json, special_signing_key)
   end
 
   #
@@ -156,9 +154,9 @@ module GgIpClientMate
   #
   # This method returns a tring representing the signature for the future request
   #
-  def self.sign_request(payload, special_signing_key: nil)
-    special_signing_key = special_signing_key.presence || GgIpClientMate::Config.webhook_secret_key
-    Webhook::Signature.sign_request(payload, special_signing_key)
+  def self.sign_request(payload, special_signing_key)
+    special_signing_key ||= GgIpClientMate::Config.webhook_secret_key
+    Security::Encryptor.sign_request(payload.to_json, special_signing_key)
   end
 
   #
@@ -198,5 +196,7 @@ require 'gg_ip_client_mate/config'
 require 'gg_ip_client_mate/errors'
 
 require 'oauth/oauth'
-require 'webhook/signature'
 require 'webhook/user_info'
+
+require 'security/encryptor'
+require 'security/validator'

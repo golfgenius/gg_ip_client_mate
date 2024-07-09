@@ -36,11 +36,11 @@ module GgIpClientMate
       # attribute maps all the user attributes with the doorkeeper attributes
       attr_accessor :user_info_attribute_mapping
 
-      ### Webhook attributes
-      # attribute that stores an integer number representing the agreed tolerance
-      # for webhook signature validation
-      attr_accessor :webhook_tolerance
+      # attribute that stores an integer number representing the agreed request tolerance
+      # for signature validation
+      attr_accessor :request_tolerance
 
+      ### Webhook attributes
       # attribute that stores the webhook_secret_key that IP generates for each
       # client webhook instance
       attr_accessor :webhook_secret_key
