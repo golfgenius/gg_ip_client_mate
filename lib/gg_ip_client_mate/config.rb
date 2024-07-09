@@ -41,10 +41,6 @@ module GgIpClientMate
       attr_accessor :request_tolerance
 
       ### Webhook attributes
-      # attribute that stores an integer number representing the agreed tolerance
-      # for webhook signature validation
-      attr_accessor :webhook_tolerance
-
       # attribute that stores the webhook_secret_key that IP generates for each
       # client webhook instance
       attr_accessor :webhook_secret_key
