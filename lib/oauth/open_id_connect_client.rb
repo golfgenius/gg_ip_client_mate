@@ -58,6 +58,49 @@ module Oauth
     # that contains the discovered OpenID Connect provider configuration.
     #
     def self.discover
+      if app_caching_enabled?
+        Rails.cache.fetch(discovery_cache_key, expires_in: 24.hours.to_i) do
+          discover!
+        end
+      else
+        @discover ||= discover!
+      end
+    end
+
+    #
+    # Checks if application caching is enabled.
+    #
+    # This method determines whether caching is enabled in the client application
+    # by checking the Rails configuration for action controller caching.
+    #
+    # @return [Boolean] true if caching is enabled, false otherwise.
+    #
+    def self.app_caching_enabled?
+      Rails.application.config.action_controller.perform_caching
+    end
+
+    #
+    # Generates a unique cache key for storing the OpenID Connect discovery configuration.
+    #
+    # This key is used when caching the discovery response to avoid redundant
+    # network requests and improve performance.
+    #
+    # @return [Array<String>] An array containing the cache key identifier
+    #                         and the client identifier.
+    #
+    def self.discovery_cache_key
+      ['idp_discovery', GgIpClientMate::Config.client_identifier]
+    end
+
+    #
+    # Performs OpenID Connect provider discovery.
+    #
+    # This method fetches the provider configuration for the given OAuth provider URI
+    # and returns an instance of OpenIDConnect::Discovery::Provider::Config.
+    #
+    # @return [OpenIDConnect::Discovery::Provider::Config] The discovered provider configuration.
+    #
+    def self.discover!
       OpenIDConnect::Discovery::Provider::Config.discover! GgIpClientMate::Config.oauth_provider_uri
     end
 
