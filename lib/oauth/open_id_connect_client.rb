@@ -58,7 +58,13 @@ module Oauth
     # that contains the discovered OpenID Connect provider configuration.
     #
     def self.discover
-      OpenIDConnect::Discovery::Provider::Config.discover! GgIpClientMate::Config.oauth_provider_uri
+      if Rails.application.config.action_controller.perform_caching
+        Rails.cache.fetch(['idp_discovery', GgIpClientMate::Config.client_identifier], expires_in: 24.hours.to_i) do
+          OpenIDConnect::Discovery::Provider::Config.discover! GgIpClientMate::Config.oauth_provider_uri
+        end
+      else
+        @discover ||= OpenIDConnect::Discovery::Provider::Config.discover! GgIpClientMate::Config.oauth_provider_uri
+      end
     end
 
     #
